@@ -1,8 +1,6 @@
 ---
 title: "Sedentary Behaviour and Cardiometabolic Multimorbidity: A Cross-sectional Analysis of NHANES August 2021-August 2023"
-author:
-  - name: "Henry Muhumuza"
-    affiliation: "Makerere University, Kampala, Uganda"
+author: ""
 format:
   html:
     toc: true
@@ -10,8 +8,13 @@ format:
     number-sections: true
     theme: cosmo
     embed-resources: true
+  docx:
+    reference-doc: ../references/reference-style.docx
+    toc: false
+    number-sections: false
 bibliography: ../references/references.bib
 csl: ../references/vancouver.csl
+link-citations: true
 execute:
   echo: false
   warning: false
@@ -65,19 +68,26 @@ pa_m5 <- reg_cont[reg_cont$model == "Model 5" & reg_cont$term == "meets_pa_guide
 bmi_m6 <- reg_cont[reg_cont$model == "Model 6" & reg_cont$term == "bmi", ]
 ```
 
+Author: Henry Muhumuza  
+Affiliation: Makerere University, Kampala, Uganda  
+Address: Kampala, Uganda  
+Email: contact@henrymuhumuza.com
+
+Corresponding author: Henry Muhumuza, Makerere University, Kampala, Uganda; Email: contact@henrymuhumuza.com
+
 # Abstract
 
-**Background:** Sedentary behaviour and physical inactivity are distinct behavioural constructs. Adults may meet physical activity recommendations while still spending prolonged periods sitting, which may be relevant to cardiometabolic health.
+**Background:**&nbsp;Sedentary behaviour and physical inactivity are distinct behavioural constructs. Adults may meet physical activity recommendations while still spending prolonged periods sitting, which may be relevant to cardiometabolic health.
 
-**Objective:** To examine whether sedentary time is independently associated with cardiometabolic multimorbidity after adjustment for physical activity among US adults in NHANES August 2021-August 2023.
+**Objective:**&nbsp;To examine whether sedentary time is independently associated with cardiometabolic multimorbidity after adjustment for physical activity among US adults in NHANES August 2021-August 2023.
 
-**Methods:** We conducted a cross-sectional analysis of adults aged 20 years or older in NHANES August 2021-August 2023. Sedentary time was assessed as usual minutes spent sitting on a typical day and modeled per 60-minute/day increment and categorically. Physical activity was summarized as moderate-equivalent minutes/week; meeting the guideline was defined as at least 150 minutes/week. Cardiometabolic multimorbidity was defined as at least two of hypertension, diabetes, and chronic kidney disease. Survey-weighted analyses accounted for Mobile Examination Center weights, strata, and primary sampling units.
+**Methods:**&nbsp;We conducted a cross-sectional analysis of adults aged 20 years or older in NHANES August 2021-August 2023. Sedentary time was assessed as usual minutes spent sitting on a typical day and modeled per 60-minute/day increment and categorically. Physical activity was summarized as moderate-equivalent minutes/week; meeting the guideline was defined as at least 150 minutes/week. Cardiometabolic multimorbidity was defined as at least two of hypertension, diabetes, and chronic kidney disease. Survey-weighted analyses accounted for Mobile Examination Center weights, strata, and primary sampling units.
 
-**Results:** The primary analytic sample included `r analytic_n` adults. Weighted median sitting time was `r sed_median` minutes/day (IQR `r sed_q1`-`r sed_q3`), and `r fmt1(sed_ge8_pct)`% reported sitting for at least 8 hours/day. Cardiometabolic multimorbidity prevalence was `r fmt1(mm_pct)`%. In the fully adjusted behavioural model, each additional 60 minutes/day of sedentary time was associated with higher odds of multimorbidity (OR `r or_ci(main_cont_m5$odds_ratio, main_cont_m5$conf_low, main_cont_m5$conf_high)`). Sitting for at least 8 hours/day was also associated with higher odds compared with less than 4 hours/day (OR `r or_ci(main_cat_ge8$odds_ratio, main_cat_ge8$conf_low, main_cat_ge8$conf_high)`). In joint exposure models, high sedentary time remained associated with higher odds even among adults meeting physical activity guidelines.
+**Results:**&nbsp;The primary analytic sample included `r analytic_n` adults. Weighted median sitting time was `r sed_median` minutes/day (IQR `r sed_q1`-`r sed_q3`), and `r fmt1(sed_ge8_pct)`% reported sitting for at least 8 hours/day. Cardiometabolic multimorbidity prevalence was `r fmt1(mm_pct)`%. In the fully adjusted behavioural model, each additional 60 minutes/day of sedentary time was associated with higher odds of multimorbidity (OR `r or_ci(main_cont_m5$odds_ratio, main_cont_m5$conf_low, main_cont_m5$conf_high)`). Sitting for at least 8 hours/day was also associated with higher odds compared with less than 4 hours/day (OR `r or_ci(main_cat_ge8$odds_ratio, main_cat_ge8$conf_low, main_cat_ge8$conf_high)`). In joint exposure models, high sedentary time remained associated with higher odds even among adults meeting physical activity guidelines.
 
-**Conclusions:** Greater sedentary time was associated with higher odds of cardiometabolic multimorbidity after adjustment for physical activity and other covariates. These findings support measuring sedentary behaviour separately from physical inactivity, while recognizing that temporality and causality cannot be inferred.
+**Conclusions:**&nbsp;Greater sedentary time was associated with higher odds of cardiometabolic multimorbidity after adjustment for physical activity and other covariates. These findings support measuring sedentary behaviour separately from physical inactivity, while recognizing that temporality and causality cannot be inferred.
 
-**Keywords:** NHANES; sedentary behaviour; physical activity; cardiometabolic multimorbidity; hypertension; diabetes; chronic kidney disease; survey-weighted analysis
+**Keywords:**&nbsp;NHANES; sedentary behaviour; physical activity; cardiometabolic multimorbidity; hypertension; diabetes; chronic kidney disease; survey-weighted analysis
 
 # Introduction
 

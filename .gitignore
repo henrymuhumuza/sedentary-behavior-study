@@ -17,6 +17,7 @@ manuscript/*_files/
 manuscript/.quarto/
 .quarto/
 *.html
+outputs/manuscript/*.docx
 
 # Keep manuscript outputs reproducible through scripts
 outputs/logs/
