@@ -1,0 +1,403 @@
+---
+title: "Sedentary Behaviour and Cardiometabolic Multimorbidity: A Cross-sectional Analysis of NHANES August 2021-August 2023"
+author:
+  - name: "Henry Muhumuza"
+    affiliation: "Makerere University, Kampala, Uganda"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    theme: cosmo
+    embed-resources: true
+bibliography: ../references/references.bib
+csl: ../references/vancouver.csl
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r setup}
+library(knitr)
+
+read_out <- function(name) read.csv(file.path("..", "outputs", "tables", name), stringsAsFactors = FALSE, fileEncoding = "UTF-8")
+fmt1 <- function(x) sprintf("%.1f", as.numeric(x))
+fmt2 <- function(x) sprintf("%.2f", as.numeric(x))
+fmtp <- function(x) {
+  x <- as.numeric(x)
+  ifelse(is.na(x), "", ifelse(x < 0.001, "<0.001", sprintf("%.3f", x)))
+}
+or_ci <- function(or, lo, hi) paste0(fmt2(or), " (95% CI ", fmt2(lo), "-", fmt2(hi), ")")
+
+flow <- read_out("figure_1_study_flow_data.csv")
+sed_q <- read_out("sedentary_time_weighted_distribution.csv")
+sed_cat <- read_out("sedentary_time_category_distribution.csv")
+desc_cont <- read_out("descriptive_continuous_overall.csv")
+desc_cat <- read_out("descriptive_categorical_overall.csv")
+desc_bin <- read_out("descriptive_binary_overall.csv")
+tab1 <- read_out("table_1_weighted_characteristics_by_sedentary.csv")
+tab2 <- read_out("table_2_prevalence_by_sedentary.csv")
+reg_cont <- read_out("table_3_multimorbidity_regression_continuous.csv")
+reg_cat <- read_out("table_3_multimorbidity_regression_categorical.csv")
+secondary <- read_out("table_4_secondary_outcome_models.csv")
+joint <- read_out("table_5_joint_sedentary_pa.csv")
+sens <- read_out("supplementary_table_3_sensitivity_cutoffs.csv")
+defs <- read_out("supplementary_table_1_variable_definitions.csv")
+miss <- read_out("supplementary_table_2_missingness.csv")
+age_sit <- read_out("figure_9_sitting_by_age_group_data.csv")
+
+analytic_n <- flow$n[flow$step == "Primary analytic sample"]
+master_n <- flow$n[flow$step == "Adults in derived adult analytic file"]
+age_mean <- desc_cont$mean[desc_cont$variable == "age"]
+female_pct <- desc_cat$percent[desc_cat$variable == "sex" & desc_cat$level == "Female"]
+pa_meet_pct <- desc_cat$percent[desc_cat$variable == "meets_pa_guideline" & desc_cat$level == "Meets guideline"]
+mm_pct <- desc_bin$percent[desc_bin$variable == "cardiometabolic_multimorbidity"]
+sed_median <- sed_q$minutes_day[sed_q$measure == "Weighted median"]
+sed_q1 <- sed_q$minutes_day[sed_q$measure == "Weighted Q1"]
+sed_q3 <- sed_q$minutes_day[sed_q$measure == "Weighted Q3"]
+sed_ge8_pct <- sed_cat$percent[sed_cat$sedentary_category == "≥8 h/day"]
+
+main_cont_m5 <- reg_cont[reg_cont$model == "Model 5" & reg_cont$term == "sitting_per_60min", ]
+main_cat_ge8 <- reg_cat[reg_cat$term == "sedentary_category≥8 h/day", ]
+main_cat_6to8 <- reg_cat[reg_cat$term == "sedentary_category6 to <8 h/day", ]
+pa_m5 <- reg_cont[reg_cont$model == "Model 5" & reg_cont$term == "meets_pa_guidelineMeets guideline", ]
+bmi_m6 <- reg_cont[reg_cont$model == "Model 6" & reg_cont$term == "bmi", ]
+```
+
+# Abstract
+
+**Background:** Sedentary behaviour and physical inactivity are distinct behavioural constructs. Adults may meet physical activity recommendations while still spending prolonged periods sitting, which may be relevant to cardiometabolic health.
+
+**Objective:** To examine whether sedentary time is independently associated with cardiometabolic multimorbidity after adjustment for physical activity among US adults in NHANES August 2021-August 2023.
+
+**Methods:** We conducted a cross-sectional analysis of adults aged 20 years or older in NHANES August 2021-August 2023. Sedentary time was assessed as usual minutes spent sitting on a typical day and modeled per 60-minute/day increment and categorically. Physical activity was summarized as moderate-equivalent minutes/week; meeting the guideline was defined as at least 150 minutes/week. Cardiometabolic multimorbidity was defined as at least two of hypertension, diabetes, and chronic kidney disease. Survey-weighted analyses accounted for Mobile Examination Center weights, strata, and primary sampling units.
+
+**Results:** The primary analytic sample included `r analytic_n` adults. Weighted median sitting time was `r sed_median` minutes/day (IQR `r sed_q1`-`r sed_q3`), and `r fmt1(sed_ge8_pct)`% reported sitting for at least 8 hours/day. Cardiometabolic multimorbidity prevalence was `r fmt1(mm_pct)`%. In the fully adjusted behavioural model, each additional 60 minutes/day of sedentary time was associated with higher odds of multimorbidity (OR `r or_ci(main_cont_m5$odds_ratio, main_cont_m5$conf_low, main_cont_m5$conf_high)`). Sitting for at least 8 hours/day was also associated with higher odds compared with less than 4 hours/day (OR `r or_ci(main_cat_ge8$odds_ratio, main_cat_ge8$conf_low, main_cat_ge8$conf_high)`). In joint exposure models, high sedentary time remained associated with higher odds even among adults meeting physical activity guidelines.
+
+**Conclusions:** Greater sedentary time was associated with higher odds of cardiometabolic multimorbidity after adjustment for physical activity and other covariates. These findings support measuring sedentary behaviour separately from physical inactivity, while recognizing that temporality and causality cannot be inferred.
+
+**Keywords:** NHANES; sedentary behaviour; physical activity; cardiometabolic multimorbidity; hypertension; diabetes; chronic kidney disease; survey-weighted analysis
+
+# Introduction
+
+Cardiometabolic multimorbidity is a major clinical and public health concern because hypertension, diabetes, and CKD frequently co-occur and share upstream behavioural, metabolic, vascular, and social determinants. Multimorbidity can complicate prevention and treatment because the health burden is not captured by considering each condition in isolation. Contemporary surveillance data are therefore useful for describing how common cardiometabolic conditions cluster in the adult population and for identifying modifiable correlates that may be relevant to prevention strategies.
+
+Sedentary behaviour has emerged as a distinct behavioural exposure rather than a simple absence of exercise. WHO defines sedentary behaviour as any waking behaviour characterized by energy expenditure of 1.5 metabolic equivalents (METs) or lower while sitting, reclining, or lying; 1 MET represents the resting metabolic rate, so the threshold denotes very low energy expenditure [@who2020guidelines]. This definition includes examples such as desk-based office work, driving, and television viewing, and can also apply to people who are unable to stand, including wheelchair users [@who2020guidelines]. By contrast, WHO defines physical activity as bodily movement produced by skeletal muscles that requires energy expenditure [@who2020guidelines]. Physical inactivity therefore refers to insufficient moderate-to-vigorous physical activity, not simply to time spent sedentary [@tremblay2017sedentary]. This distinction matters because many adults who meet physical activity recommendations may still spend long periods sitting. Epidemiologic studies have linked higher sedentary time with adverse cardiometabolic markers and outcomes, including disease incidence, hospitalization, and mortality, but the extent to which these associations persist after accounting for physical activity remains an important question [@biswas2015sedentary; @ekelund2016physical].
+
+NHANES August 2021-August 2023 provides a timely opportunity to examine sedentary behaviour and cardiometabolic multimorbidity in a nationally representative sample of US adults [@nhanes2021overview; @nhanesanalyticguidelines]. The present study estimated the association of daily sitting time with cardiometabolic multimorbidity after sequential adjustment for demographics, socioeconomic position, physical activity, and selected behavioural covariates. It also examined joint sedentary behaviour and physical activity categories to assess whether high sitting time remained associated with multimorbidity among adults who met physical activity guidelines.
+
+# Methods
+
+## Study Design and Data Source
+
+We conducted a cross-sectional analytical study using NHANES August 2021-August 2023. NHANES is conducted by the National Center for Health Statistics and uses a complex, multistage probability sampling design to represent the US civilian non-institutionalized population [@nhanes2021overview; @nhanesanalyticguidelines]. We derived the analytic dataset from the public-use NHANES XPT files using reproducible R scripts, with raw source files retained unchanged throughout the workflow.
+
+## Study Population
+
+The derived adult analytic file contained `r master_n` adults aged 20 years or older before study-specific exclusions. Participants were excluded from the primary analytic sample if they were missing usual sitting time, cardiometabolic multimorbidity status, a positive MEC examination weight, masked variance stratum, or masked primary sampling unit. The derivation of the primary analytic sample is shown in @tbl-flow. Regression models used complete cases for covariates included in each model.
+
+```{r}
+#| label: tbl-flow
+#| tbl-cap: "Study population flow."
+kable(flow, digits = 1)
+```
+
+*Note: MEC design-variable exclusions included participants with a missing or non-positive MEC examination weight (`wtmec2yr ≤ 0`) or missing masked variance stratum (`sdmvstra`) or primary sampling unit (`sdmvpsu`).*
+
+## Exposure Assessment
+
+The main exposure was sedentary time. Consistent with WHO guidance, sedentary behaviour was conceptually defined as waking sitting, reclining, or lying behaviour with energy expenditure of 1.5 METs or lower; a MET is a metabolic equivalent, with 1 MET approximating resting energy expenditure [@who2020guidelines]. The WHO guidelines operationalize sedentary behaviour using self-reported low-movement sitting across leisure, occupational, and total sitting domains; television viewing or screen time; and low movement measured by devices that assess movement or posture [@who2020guidelines]. Population-based studies commonly use both self-reported sitting measures, which can capture domain- or behaviour-specific sitting, and device-based measures, which better capture total sedentary time and accumulation patterns [@healy2011measurement]. In this NHANES analysis, sedentary behaviour was measured by self-report using the Physical Activity Questionnaire item PAD680, which asks about usual minutes spent sitting on a typical day; this variable was retained as `sitting_minutes_day`. Sedentary time was analyzed per 60-minute/day increment and in categories: less than 4 hours/day, 4 to less than 6 hours/day, 6 to less than 8 hours/day, and 8 or more hours/day. Alternative cutoffs were examined in sensitivity analyses.
+
+## Physical Activity
+
+Physical activity was defined according to WHO as any bodily movement produced by skeletal muscles that requires energy expenditure [@who2020guidelines]. In this NHANES analysis, leisure-time physical activity was measured by self-report in the Physical Activity Questionnaire. Moderate physical activity minutes per week were calculated as the reported moderate activity frequency (`PAD790Q`), converted to weekly equivalents using the reported frequency unit (`PAD790U`), multiplied by the reported minutes per episode (`PAD800`). Vigorous physical activity minutes per week were calculated analogously using vigorous activity frequency (`PAD810Q`), frequency unit (`PAD810U`), and minutes per episode (`PAD820`), then counted double when deriving moderate-equivalent minutes per week. Meeting the physical activity guideline was defined as at least 150 moderate-equivalent minutes per week [@piercy2018physical; @who2020guidelines].
+
+## Outcomes
+
+The primary outcome was cardiometabolic multimorbidity, defined as at least two of hypertension, diabetes, and CKD. Hypertension was defined by mean systolic blood pressure of at least 140 mmHg, mean diastolic blood pressure of at least 90 mmHg, self-reported hypertension, or antihypertensive medication use. Diabetes was defined by self-reported physician diagnosis, HbA1c of at least 6.5%, insulin use, or diabetes medication use. CKD was defined by estimated glomerular filtration rate less than 60 mL/min/1.73 m^2^ or urine albumin-creatinine ratio of at least 30 mg/g. Secondary outcomes were hypertension, diabetes, and CKD considered separately.
+
+The operational definitions and missing-value criteria for sedentary behaviour, physical activity, and disease outcomes are summarized in @tbl-definitions.
+
+```{r}
+#| label: tbl-definitions
+#| tbl-cap: "Variable definitions and outcome criteria."
+kable(defs, col.names = c("Construct", "Operational definition", "Missing-value criteria"))
+```
+
+## Covariates
+
+Core adjustment variables included age, sex, race/ethnicity, education, and poverty-income ratio. Physical activity guideline status was added to test whether sedentary time was associated with multimorbidity independently of physical activity. Additional behavioural covariates included smoking status, alcohol use, and sleep duration. Body mass index (BMI) was considered in an extended model because adiposity may plausibly lie on the pathway between sedentary behaviour and cardiometabolic disease; therefore, the BMI-adjusted model was interpreted as a sensitivity analysis rather than the primary estimate.
+
+## Statistical Analysis
+
+All analyses accounted for the NHANES complex survey design using MEC examination weights (`wtmec2yr`), masked variance primary sampling units (`sdmvpsu`), and masked variance strata (`sdmvstra`). Weighted descriptive analyses summarized participant characteristics overall and by sedentary time category. Weighted prevalence of hypertension, diabetes, CKD, and cardiometabolic multimorbidity was estimated by sedentary time category.
+
+Survey-weighted logistic regression estimated odds ratios and 95% confidence intervals. Sequential models were specified as follows: Model 1 included sedentary time only; Model 2 added age, sex, and race/ethnicity; Model 3 added education and poverty-income ratio; Model 4 added physical activity guideline status; Model 5 added smoking, alcohol, and sleep; and Model 6 added BMI as an extended model. Secondary outcome models repeated the Model 5 covariate set for hypertension, diabetes, and CKD.
+
+A joint exposure variable classified participants as low sedentary plus meeting physical activity guideline, high sedentary plus meeting guideline, low sedentary plus not meeting guideline, or high sedentary plus not meeting guideline. High sedentary time was defined as at least 8 hours/day. Restricted spline models were used as exploratory dose-response analyses.
+
+# Results
+
+## Study Population
+
+The primary analytic sample included `r analytic_n` adults after core exclusions (@tbl-flow). Weighted mean age was `r fmt1(age_mean)` years, `r fmt1(female_pct)`% of adults were female, and `r fmt1(pa_meet_pct)`% met the physical activity guideline. Weighted prevalences were `r fmt1(desc_bin$percent[desc_bin$variable == "hypertension"])`% for hypertension, `r fmt1(desc_bin$percent[desc_bin$variable == "diabetes"])`% for diabetes, `r fmt1(desc_bin$percent[desc_bin$variable == "ckd"])`% for CKD, and `r fmt1(mm_pct)`% for cardiometabolic multimorbidity. Weighted continuous participant characteristics by sedentary time category are presented in @tbl-table1.
+
+```{r}
+#| label: tbl-table1
+#| tbl-cap: "Weighted continuous characteristics by sedentary time category."
+tab1_fmt <- tab1
+tab1_labels <- c(
+  age = "Age, years",
+  pir = "Poverty-income ratio",
+  bmi = "Body mass index, kg/m^2^",
+  waist_cm = "Waist circumference, cm",
+  total_meq_minutes_week = "Physical activity, moderate-equivalent minutes/week"
+)
+tab1_fmt$variable <- ifelse(tab1_fmt$variable %in% names(tab1_labels), tab1_labels[tab1_fmt$variable], tab1_fmt$variable)
+tab1_fmt$mean <- fmt1(tab1_fmt$mean)
+tab1_fmt$se <- fmt1(tab1_fmt$se)
+kable(tab1_fmt, col.names = c("Characteristic", "Sedentary time category", "Weighted mean", "Standard error"))
+```
+
+## Sedentary Time Distribution
+
+Weighted median sitting time was `r sed_median` minutes/day, with an interquartile range from `r sed_q1` to `r sed_q3` minutes/day. In weighted analyses, `r fmt1(sed_cat$percent[sed_cat$sedentary_category == "<4 h/day"])`% of adults reported less than 4 hours/day of sitting, `r fmt1(sed_cat$percent[sed_cat$sedentary_category == "4 to <6 h/day"])`% reported 4 to less than 6 hours/day, `r fmt1(sed_cat$percent[sed_cat$sedentary_category == "6 to <8 h/day"])`% reported 6 to less than 8 hours/day, and `r fmt1(sed_ge8_pct)`% reported 8 or more hours/day. The overall distribution of daily sedentary time is shown in @fig-sedentary-dist.
+
+```{r}
+#| label: fig-sedentary-dist
+#| fig-cap: "Distribution of daily sedentary time among adults in the analytic sample."
+knitr::include_graphics(file.path("..", "outputs", "figures", "figure_2_sedentary_time_distribution.png"))
+```
+
+Weighted mean sitting time by age group is summarized in @tbl-age-sitting.
+
+```{r}
+#| label: tbl-age-sitting
+#| tbl-cap: "Weighted mean daily sitting time by age group."
+age_sit_fmt <- age_sit
+age_sit_fmt$mean_hours <- fmt1(age_sit_fmt$mean_hours)
+age_sit_fmt$se <- fmt1(age_sit_fmt$se)
+kable(age_sit_fmt, col.names = c("Age group, years", "Weighted mean sitting time, hours/day", "Standard error"))
+```
+
+*Note: Mean sitting time was broadly similar across age groups, with the highest point estimate among adults aged 20-39 years. This suggests that high sitting time in this sample was not limited to older adults.*
+
+## Cardiometabolic Outcomes
+
+Cardiometabolic outcome prevalence generally appeared highest in the 6 to less than 8 hours/day or 8 or more hours/day sedentary categories, although the pattern was not strictly monotonic across all outcomes. Weighted cardiometabolic multimorbidity prevalence was `r fmt1(tab2$percent[tab2$outcome == "cardiometabolic_multimorbidity" & tab2$sedentary_category == "<4 h/day"])`% among adults sitting less than 4 hours/day, `r fmt1(tab2$percent[tab2$outcome == "cardiometabolic_multimorbidity" & tab2$sedentary_category == "6 to <8 h/day"])`% among those sitting 6 to less than 8 hours/day, and `r fmt1(tab2$percent[tab2$outcome == "cardiometabolic_multimorbidity" & tab2$sedentary_category == "≥8 h/day"])`% among those sitting at least 8 hours/day. Outcome prevalence by sedentary time category is summarized in @tbl-table2 and displayed for multimorbidity in @fig-prevalence.
+
+```{r}
+#| label: tbl-table2
+#| tbl-cap: "Weighted prevalence of cardiometabolic outcomes by sedentary time category."
+tab2_fmt <- tab2
+tab2_labels <- c(
+  hypertension = "Hypertension",
+  diabetes = "Diabetes",
+  ckd = "Chronic kidney disease",
+  cardiometabolic_multimorbidity = "Cardiometabolic multimorbidity"
+)
+tab2_fmt$outcome <- ifelse(tab2_fmt$outcome %in% names(tab2_labels), tab2_labels[tab2_fmt$outcome], tab2_fmt$outcome)
+tab2_fmt$percent <- fmt1(tab2_fmt$percent)
+tab2_fmt$se <- fmt1(tab2_fmt$se)
+kable(tab2_fmt, col.names = c("Outcome", "Sedentary time category", "Weighted prevalence, %", "Standard error"))
+```
+
+```{r}
+#| label: fig-prevalence
+#| fig-cap: "Weighted prevalence of cardiometabolic multimorbidity by sedentary time category."
+knitr::include_graphics(file.path("..", "outputs", "figures", "figure_3_multimorbidity_by_sedentary.png"))
+```
+
+## Main Regression Models
+
+When sedentary time was modeled continuously, each additional 60 minutes/day was associated with higher odds of cardiometabolic multimorbidity. The odds ratio per 60-minute/day increment was `r or_ci(main_cont_m5$odds_ratio, main_cont_m5$conf_low, main_cont_m5$conf_high)` in Model 5, adjusted for age, sex, race/ethnicity, education, poverty-income ratio, physical activity guideline status, smoking, alcohol, and sleep. Adding BMI in Model 6 attenuated but did not eliminate the positive continuous association (OR `r or_ci(reg_cont$odds_ratio[reg_cont$model == "Model 6" & reg_cont$term == "sitting_per_60min"], reg_cont$conf_low[reg_cont$model == "Model 6" & reg_cont$term == "sitting_per_60min"], reg_cont$conf_high[reg_cont$model == "Model 6" & reg_cont$term == "sitting_per_60min"])`). Sequential continuous and categorical regression models are shown in @tbl-table3.
+
+In categorical models, adults reporting 8 or more hours/day of sitting had higher odds of cardiometabolic multimorbidity than those reporting less than 4 hours/day after Model 5 adjustment (OR `r or_ci(main_cat_ge8$odds_ratio, main_cat_ge8$conf_low, main_cat_ge8$conf_high)`). The estimate for 6 to less than 8 hours/day was elevated but less precise (OR `r or_ci(main_cat_6to8$odds_ratio, main_cat_6to8$conf_low, main_cat_6to8$conf_high)`).
+
+```{r}
+#| label: tbl-table3
+#| tbl-cap: "Survey-weighted logistic regression models for sedentary time and cardiometabolic multimorbidity."
+cont_rows <- reg_cont[reg_cont$term == "sitting_per_60min", c("model", "term", "odds_ratio", "conf_low", "conf_high", "p_value", "n_unweighted")]
+cat_rows <- reg_cat[grepl("^sedentary_category", reg_cat$term), c("model", "term", "odds_ratio", "conf_low", "conf_high", "p_value", "n_unweighted")]
+table3 <- rbind(cont_rows, cat_rows)
+table3$OR_95_CI <- or_ci(table3$odds_ratio, table3$conf_low, table3$conf_high)
+table3$p_value <- fmtp(table3$p_value)
+table3$model <- ifelse(table3$model == "Model 5 categorical", "Model 5 (categorical sedentary time)", table3$model)
+table3$term <- sub("^sedentary_category", "", table3$term)
+table3$term <- ifelse(table3$term == "sitting_per_60min", "Sedentary time, per 60 minutes/day", table3$term)
+table3$term <- ifelse(table3$term == "4 to <6 h/day", "4 to <6 h/day vs <4 h/day", table3$term)
+table3$term <- ifelse(table3$term == "6 to <8 h/day", "6 to <8 h/day vs <4 h/day", table3$term)
+table3$term <- ifelse(table3$term == "≥8 h/day", "≥8 h/day vs <4 h/day", table3$term)
+row.names(table3) <- NULL
+kable(table3[, c("model", "term", "OR_95_CI", "p_value", "n_unweighted")],
+      col.names = c("Model", "Exposure term", "Odds ratio (95% CI)", "P value", "Unweighted n"),
+      row.names = FALSE)
+```
+
+*Note: The unweighted n is the number of complete-case participants included in each model. This number varies because later models include additional covariates with missing data; it is retained to show the model-specific analytic sample size.*
+
+## Secondary Outcomes
+
+In Model 5 secondary outcome analyses, sedentary time modeled per 60-minute/day increment was associated with higher odds of hypertension, diabetes, and CKD (@tbl-table4). The magnitude was modest for each component outcome but directionally consistent with the multimorbidity model.
+
+```{r}
+#| label: tbl-table4
+#| tbl-cap: "Secondary outcome models for sedentary time per 60-minute/day increment."
+sec_rows <- secondary[secondary$term == "sitting_per_60min", c("outcome", "odds_ratio", "conf_low", "conf_high", "p_value", "n_unweighted")]
+sec_rows$OR_95_CI <- or_ci(sec_rows$odds_ratio, sec_rows$conf_low, sec_rows$conf_high)
+sec_rows$p_value <- fmtp(sec_rows$p_value)
+sec_labels <- c(
+  hypertension = "Hypertension",
+  diabetes = "Diabetes",
+  ckd = "Chronic kidney disease"
+)
+sec_rows$outcome <- ifelse(sec_rows$outcome %in% names(sec_labels), sec_labels[sec_rows$outcome], sec_rows$outcome)
+row.names(sec_rows) <- NULL
+kable(sec_rows[, c("outcome", "OR_95_CI", "p_value", "n_unweighted")],
+      col.names = c("Outcome", "Odds ratio per 60 minutes/day (95% CI)", "P value", "Unweighted n"),
+      row.names = FALSE)
+```
+
+## Joint Sedentary Behaviour and Physical Activity
+
+Joint exposure models supported the distinction between sedentary behaviour and physical activity. Compared with adults with low sedentary time who met physical activity guidelines, adults with high sedentary time who met guidelines had higher odds of cardiometabolic multimorbidity (OR `r or_ci(joint$odds_ratio[joint$term == "joint_sedentary_paHigh sedentary + Meets guideline"], joint$conf_low[joint$term == "joint_sedentary_paHigh sedentary + Meets guideline"], joint$conf_high[joint$term == "joint_sedentary_paHigh sedentary + Meets guideline"])`). Adults with high sedentary time who did not meet guidelines had the highest point estimate (OR `r or_ci(joint$odds_ratio[joint$term == "joint_sedentary_paHigh sedentary + Does not meet guideline"], joint$conf_low[joint$term == "joint_sedentary_paHigh sedentary + Does not meet guideline"], joint$conf_high[joint$term == "joint_sedentary_paHigh sedentary + Does not meet guideline"])`). The full joint exposure model is presented in @tbl-table5, and weighted multimorbidity prevalence across joint groups is shown in @fig-joint.
+
+```{r}
+#| label: tbl-table5
+#| tbl-cap: "Joint association of sedentary behaviour and physical activity with cardiometabolic multimorbidity."
+joint_rows <- joint[grepl("^joint_sedentary_pa", joint$term), c("term", "odds_ratio", "conf_low", "conf_high", "p_value", "n_unweighted")]
+joint_rows$OR_95_CI <- or_ci(joint_rows$odds_ratio, joint_rows$conf_low, joint_rows$conf_high)
+joint_rows$p_value <- fmtp(joint_rows$p_value)
+joint_rows$term <- sub("^joint_sedentary_pa", "", joint_rows$term)
+joint_rows$term <- ifelse(
+  joint_rows$term == "High sedentary + Does not meet guideline",
+  "High sedentary + does not meet PA guideline vs low sedentary + meets PA guideline",
+  joint_rows$term
+)
+joint_rows$term <- ifelse(
+  joint_rows$term == "Low sedentary + Does not meet guideline",
+  "Low sedentary + does not meet PA guideline vs low sedentary + meets PA guideline",
+  joint_rows$term
+)
+joint_rows$term <- ifelse(
+  joint_rows$term == "High sedentary + Meets guideline",
+  "High sedentary + meets PA guideline vs low sedentary + meets PA guideline",
+  joint_rows$term
+)
+row.names(joint_rows) <- NULL
+kable(joint_rows[, c("term", "OR_95_CI", "p_value", "n_unweighted")],
+      col.names = c("Joint exposure contrast", "Odds ratio (95% CI)", "P value", "Unweighted n"),
+      row.names = FALSE)
+```
+
+```{r}
+#| label: fig-joint
+#| fig-cap: "Weighted prevalence of cardiometabolic multimorbidity by joint sedentary behaviour and physical activity group."
+knitr::include_graphics(file.path("..", "outputs", "figures", "figure_5_joint_sedentary_pa.png"))
+```
+
+## Dose-Response and Sensitivity Analyses
+
+The exploratory spline curve, shown in @fig-spline, did not suggest a simple linear dose-response pattern across the full range of reported sitting time. Sensitivity analyses were broadly consistent with the main interpretation: higher sedentary time was associated with higher odds of cardiometabolic multimorbidity, with evidence from the per-hour continuous model, the primary categorical model, and alternative high-sedentary cut points. In the extended BMI-adjusted model, BMI was strongly associated with cardiometabolic multimorbidity (OR `r or_ci(bmi_m6$odds_ratio, bmi_m6$conf_low, bmi_m6$conf_high)`), and the sedentary time estimate was attenuated but remained positive. Missingness in key analytic variables is summarized in @tbl-missingness.
+
+```{r}
+#| label: fig-spline
+#| fig-cap: "Exploratory adjusted spline model for sedentary time and cardiometabolic multimorbidity."
+knitr::include_graphics(file.path("..", "outputs", "figures", "figure_6_spline_dose_response.png"))
+```
+
+```{r}
+#| label: tbl-missingness
+#| tbl-cap: "Missingness in key variables."
+miss_fmt <- miss
+miss_labels <- c(
+  sitting_minutes_day = "Daily sitting time",
+  cardiometabolic_multimorbidity = "Cardiometabolic multimorbidity",
+  wtmec2yr = "MEC examination weight",
+  sdmvpsu = "Masked variance primary sampling unit",
+  sdmvstra = "Masked variance stratum",
+  age = "Age",
+  sex = "Sex",
+  race_ethnicity = "Race/ethnicity",
+  education = "Education",
+  pir = "Poverty-income ratio",
+  bmi = "Body mass index",
+  smoking_status = "Smoking status",
+  alcohol_ever = "Ever alcohol use",
+  sleep_hours_weekday = "Weekday sleep duration",
+  meets_pa_guideline = "Meets physical activity guideline"
+)
+miss_fmt$variable <- ifelse(miss_fmt$variable %in% names(miss_labels), miss_labels[miss_fmt$variable], miss_fmt$variable)
+miss_fmt$missing_percent <- fmt1(miss_fmt$missing_percent)
+row.names(miss_fmt) <- NULL
+kable(miss_fmt, col.names = c("Variable", "Missing n", "Missing, %"), row.names = FALSE)
+```
+
+# Discussion
+
+## Principal Findings
+
+In this nationally representative cross-sectional analysis of US adults in NHANES August 2021-August 2023, sedentary time was associated with cardiometabolic multimorbidity. Each additional hour/day of sedentary time was associated with modestly higher adjusted odds of multimorbidity after adjustment for demographics, socioeconomic position, physical activity, smoking, alcohol use, and sleep. Adults reporting very high sedentary time, defined as at least 8 hours/day, also had higher adjusted odds of cardiometabolic multimorbidity than adults reporting less than 4 hours/day. Joint exposure analyses further suggested that high sedentary time was associated with higher odds of multimorbidity even among adults who met physical activity guidelines.
+
+The secondary outcome analyses showed modest positive per-hour associations for hypertension, diabetes, and CKD individually. This pattern suggests that the multimorbidity association may reflect a broader cardiometabolic risk profile rather than a signal limited to one component disease.
+
+## Comparison With Existing Literature
+
+These findings support the conceptual distinction between sedentary behaviour and physical inactivity emphasized in WHO guidance: sedentary behaviour is defined by posture and very low energy expenditure, whereas physical activity is defined by skeletal-muscle movement that raises energy expenditure [@who2020guidelines]. Meeting physical activity recommendations was associated with lower odds of multimorbidity in adjusted models, but greater sitting time still identified adults with higher cardiometabolic burden. The continuous, categorical, and joint exposure results together suggest that sedentary time captures cardiometabolic risk information beyond physical activity guideline status, although the spline and descriptive results indicate that the relationship may not be strictly linear across all sitting-time categories.
+
+The findings are consistent with prior meta-analytic evidence linking higher sedentary time with adverse disease incidence, hospitalization, and mortality outcomes [@biswas2015sedentary]. They also align with evidence that physical activity may attenuate, but not necessarily eliminate, the risks associated with prolonged sitting [@ekelund2016physical]. However, individual disease models have different measurement properties and denominators, particularly for laboratory-based outcomes. Because this analysis is cross-sectional, reverse causation remains plausible: adults with established cardiometabolic disease or functional limitation may sit for longer periods.
+
+## Policy and Clinical Implications
+
+The BMI-adjusted model requires cautious interpretation. BMI was strongly associated with multimorbidity, and adjustment for BMI attenuated the sedentary time association. Because adiposity may be a mediator between sedentary behaviour and cardiometabolic disease, BMI-adjusted results should not be interpreted as the sole primary estimate. Instead, they show that the observed association between sedentary time and multimorbidity is embedded within a broader behavioural and metabolic risk profile.
+
+From an intervention perspective, these findings should be interpreted as observational evidence of elevated cardiometabolic burden among adults with greater sedentary time rather than proof that reducing sitting would prevent cardiometabolic multimorbidity. However, trial evidence summarized in a systematic review and meta-analysis suggests that adult interventions can reduce sedentary time, particularly when interventions focus specifically on sedentary behaviour or broader lifestyle change [@martin2015interventions].
+
+For clinical and public health practice, the results support assessing sedentary time separately from physical activity. Adults who meet physical activity guidelines may still have high sitting time and elevated cardiometabolic burden, so counselling and surveillance strategies may need to address both movement promotion and sitting reduction.
+
+## Implications for Further Research
+
+Future studies should use longitudinal designs to clarify temporality and reduce the possibility of reverse causation. Repeated measures of kidney function and albuminuria would strengthen CKD classification, and device-based sedentary behaviour measures could better capture total sedentary time and accumulation patterns. Intervention studies are also needed to determine whether reducing sedentary time can meaningfully lower cardiometabolic multimorbidity risk, especially among adults who already meet physical activity recommendations.
+
+## Strengths and Limitations
+
+Strengths include use of a contemporary nationally representative US sample, standardized NHANES examination and laboratory measures, explicit accounting for the complex survey design, and separation of sedentary behaviour from physical activity. The analysis evaluated cardiometabolic multimorbidity rather than only single component diseases and included joint sedentary behaviour and physical activity models aligned with the study's central question.
+
+Limitations include the cross-sectional design, self-reported sedentary time and physical activity, potential residual confounding, and the possibility of reverse causation. Physical activity derivation depends on self-reported frequency, duration, and frequency-unit fields; the analysis recovered PA unit fields from the raw PAQ file, but any reporting error in these items could affect moderate-equivalent minutes/week. CKD was defined using cross-sectional eGFR and albuminuria measures, whereas clinical CKD is ideally defined by abnormalities of kidney structure or function that are present for at least 3 months [@kdigo2024ckd]. Model-specific complete-case denominators varied, and missingness in outcome or survey design variables reduced the analytic sample. Finally, greater sitting time may reflect underlying illness, disability, occupational patterns, or social circumstances that were not fully captured in the available covariates.
+
+# Conclusions
+
+Among US adults in NHANES August 2021-August 2023, higher sedentary time was associated with higher odds of cardiometabolic multimorbidity after adjustment for physical activity and other covariates, both per additional hour/day and for sitting at least 8 hours/day. The findings support measuring sedentary behaviour, conceptually defined as waking sitting, reclining, or lying behaviour at 1.5 METs or lower, separately from physical inactivity and suggest that greater sitting time may identify adults with greater cardiometabolic burden. Because the study is cross-sectional, these associations should not be interpreted as causal.
+
+# Declarations
+
+## Ethics Approval and Consent to Participate
+
+NHANES protocols are reviewed and approved by the National Center for Health Statistics Research Ethics Review Board, and all participants provide informed consent. This secondary analysis used de-identified public-use NHANES data and did not involve additional participant contact.
+
+## Consent for Publication
+
+Not applicable. This manuscript does not include identifiable individual participant data.
+
+## Availability of Data and Materials
+
+NHANES August 2021-August 2023 public-use data are publicly available from the National Center for Health Statistics [@nhanes2021overview]. The analytic dataset was derived from publicly available NHANES August 2021-August 2023 SAS transport (`.xpt`) files. Raw files were imported, merged, and processed using R scripts to create the final analytic dataset. The analysis scripts will be hosted in a public GitHub repository and archived on Zenodo to support reproducibility; the repository link and Zenodo DOI will be added before submission.
+
+## Competing Interests
+
+The author declares no competing interests.
+
+## Funding
+
+No specific funding was received for this analysis.
+
+## Author Contributions
+
+H.M. conceived and designed the study, developed the research question, obtained and curated the NHANES data, prepared the analytic dataset, defined the study variables and outcomes, conducted the statistical analyses, generated the tables and figures, interpreted the findings, drafted and revised the manuscript, and approved the final version.
+
+## Acknowledgements
+
+The author acknowledges the National Center for Health Statistics, the NHANES study staff, and the survey participants whose publicly available data made this analysis possible.
+
+# References

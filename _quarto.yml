@@ -1,0 +1,12 @@
+project:
+  type: default
+  output-dir: outputs
+
+bibliography: references/references.bib
+csl: references/vancouver.csl
+
+format:
+  html:
+    toc: true
+    number-sections: true
+    theme: cosmo

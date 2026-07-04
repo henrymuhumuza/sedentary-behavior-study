@@ -1,0 +1,39 @@
+Rplots.pdf
+.Rhistory
+.RData
+.Rproj.user/
+.vscode/
+
+# Project-local package library
+renv/library/
+
+# Large generated/intermediate data
+data/raw/
+data/interim/
+data/processed/
+
+# Render/cache artifacts
+manuscript/*_files/
+manuscript/.quarto/
+.quarto/
+*.html
+
+# Keep manuscript outputs reproducible through scripts
+outputs/logs/
+outputs/outputs/
+logs/
+
+# Unused or row-level generated figure artifacts
+outputs/figures/figure_1_study_flow.png
+outputs/figures/figure_4_adjusted_odds_ratios.png
+outputs/figures/figure_7_sitting_boxplot_by_multimorbidity.png
+outputs/figures/figure_8_age_sedentary_scatter.png
+outputs/figures/figure_9_sitting_by_age_group_line.png
+outputs/figures/figure_10_pa_by_sedentary_stacked_bar.png
+outputs/tables/figure_1_study_flow_plot_data.csv
+outputs/tables/figure_7_sitting_boxplot_data.csv
+outputs/tables/figure_8_age_sedentary_scatter_data.csv
+outputs/tables/figure_10_pa_by_sedentary_data.csv
+
+/.quarto/
+**/*.quarto_ipynb

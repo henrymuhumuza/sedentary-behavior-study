@@ -1,0 +1,17 @@
+"model","term","odds_ratio","conf_low","conf_high","p_value","exposure","n_unweighted"
+"Joint sedentary-PA model","(Intercept)",0.00822586469853182,0.00380024364524223,0.0178053978521262,3.76958280434468e-34,"Joint sedentary behaviour and PA",4825
+"Joint sedentary-PA model","joint_sedentary_paHigh sedentary + Does not meet guideline",2.06511694121189,1.69469445106997,2.51650554363224,6.47542829681485e-13,"Joint sedentary behaviour and PA",4825
+"Joint sedentary-PA model","joint_sedentary_paLow sedentary + Does not meet guideline",1.59213922012894,1.24153325218459,2.04175545988188,0.000247520262976012,"Joint sedentary behaviour and PA",4825
+"Joint sedentary-PA model","joint_sedentary_paHigh sedentary + Meets guideline",1.68242957584953,1.33671530903238,2.11755581653526,9.29800793196463e-06,"Joint sedentary behaviour and PA",4825
+"Joint sedentary-PA model","age",1.07275741227095,1.06560760419837,1.0799551927447,3.74670679022187e-94,"Joint sedentary behaviour and PA",4825
+"Joint sedentary-PA model","sexMale",1.07337082135538,0.919924002799173,1.25241315220757,0.368346450484114,"Joint sedentary behaviour and PA",4825
+"Joint sedentary-PA model","race_ethnicityOther Hispanic",0.844536671752823,0.635649654261989,1.12206808444415,0.243802881654838,"Joint sedentary behaviour and PA",4825
+"Joint sedentary-PA model","race_ethnicityNon-Hispanic White",0.642776766507325,0.425972533044917,0.969926320385654,0.0352505678331959,"Joint sedentary behaviour and PA",4825
+"Joint sedentary-PA model","race_ethnicityNon-Hispanic Black",1.69091326748027,0.972049949829527,2.9413999544388,0.0629367988795074,"Joint sedentary behaviour and PA",4825
+"Joint sedentary-PA model","race_ethnicityNon-Hispanic Asian",0.987402162440502,0.505546674381194,1.92853218070432,0.970390387168079,"Joint sedentary behaviour and PA",4825
+"Joint sedentary-PA model","race_ethnicityOther/Multi-racial",1.00571393160908,0.636276923667294,1.58965455858885,0.980539391747276,"Joint sedentary behaviour and PA",4825
+"Joint sedentary-PA model","education9th-11th grade",1.14144630051608,0.794160476505196,1.64059997381816,0.474740477534061,"Joint sedentary behaviour and PA",4825
+"Joint sedentary-PA model","educationHigh school/GED",0.74744322368962,0.467906607107655,1.19398051695174,0.223182259493903,"Joint sedentary behaviour and PA",4825
+"Joint sedentary-PA model","educationSome college/AA",0.684004011339477,0.45043407799312,1.03869025543765,0.0747659457943123,"Joint sedentary behaviour and PA",4825
+"Joint sedentary-PA model","educationCollege graduate or above",0.41916662516699,0.287205711913968,0.611758932240576,6.55595759300392e-06,"Joint sedentary behaviour and PA",4825
+"Joint sedentary-PA model","pir",0.900447569441566,0.837471616606912,0.968159170096143,0.004586190346184,"Joint sedentary behaviour and PA",4825

@@ -1,0 +1,58 @@
+"model","term","odds_ratio","conf_low","conf_high","p_value","exposure","outcome","n_unweighted"
+"Model 5: hypertension","(Intercept)",0.0304885645363681,0.0106090451925208,0.0876188715025552,9.13701311800125e-11,"Sedentary time per 60 min/day","hypertension",3064
+"Model 5: hypertension","sitting_per_60min",1.07329338822287,1.04913253908203,1.09801064621527,1.13650625585304e-09,"Sedentary time per 60 min/day","hypertension",3064
+"Model 5: hypertension","age",1.0646515752688,1.05987484049964,1.06944983823562,3.58378002722304e-164,"Sedentary time per 60 min/day","hypertension",3064
+"Model 5: hypertension","sexMale",1.11821003543667,0.984380032977531,1.27023470759469,0.0858086657324152,"Sedentary time per 60 min/day","hypertension",3064
+"Model 5: hypertension","race_ethnicityOther Hispanic",0.842491958665954,0.528783921364452,1.34231142767215,0.470782396325882,"Sedentary time per 60 min/day","hypertension",3064
+"Model 5: hypertension","race_ethnicityNon-Hispanic White",0.73731635136746,0.467447335797566,1.16298748620797,0.189987934851795,"Sedentary time per 60 min/day","hypertension",3064
+"Model 5: hypertension","race_ethnicityNon-Hispanic Black",1.52855674690391,0.933634789974565,2.50256926326525,0.0916055871557295,"Sedentary time per 60 min/day","hypertension",3064
+"Model 5: hypertension","race_ethnicityNon-Hispanic Asian",1.08844310203218,0.601961743862454,1.96807919845507,0.779140744867299,"Sedentary time per 60 min/day","hypertension",3064
+"Model 5: hypertension","race_ethnicityOther/Multi-racial",0.691912195729781,0.369293093697815,1.29637541229339,0.250267299618664,"Sedentary time per 60 min/day","hypertension",3064
+"Model 5: hypertension","education9th-11th grade",0.847487164956733,0.44739872764325,1.60535658773512,0.611654652388445,"Sedentary time per 60 min/day","hypertension",3064
+"Model 5: hypertension","educationHigh school/GED",0.990899347365894,0.521097696297465,1.88425610703459,0.977756433151603,"Sedentary time per 60 min/day","hypertension",3064
+"Model 5: hypertension","educationSome college/AA",0.883883263380611,0.466227653964494,1.67568271989258,0.705273481629465,"Sedentary time per 60 min/day","hypertension",3064
+"Model 5: hypertension","educationCollege graduate or above",0.665624679744621,0.345720223187782,1.28154555206473,0.223299177222385,"Sedentary time per 60 min/day","hypertension",3064
+"Model 5: hypertension","pir",0.92005035331497,0.871138055114079,0.97170895894813,0.00279259147069123,"Sedentary time per 60 min/day","hypertension",3064
+"Model 5: hypertension","meets_pa_guidelineMeets guideline",0.766925347140341,0.633701741976592,0.928156653399351,0.00641415706645923,"Sedentary time per 60 min/day","hypertension",3064
+"Model 5: hypertension","smoking_statusFormer",1.10094452167372,0.80752553945483,1.50097895432716,0.543099391017155,"Sedentary time per 60 min/day","hypertension",3064
+"Model 5: hypertension","smoking_statusNever",0.955982959414523,0.666521108532373,1.37115450207315,0.806744020716802,"Sedentary time per 60 min/day","hypertension",3064
+"Model 5: hypertension","alcohol_ever",0.974189644729457,0.674068533547491,1.40793616177789,0.889316067783838,"Sedentary time per 60 min/day","hypertension",3064
+"Model 5: hypertension","sleep_hours_weekday",1.01071201056261,0.947024555641175,1.07868245042906,0.748309316365286,"Sedentary time per 60 min/day","hypertension",3064
+"Model 5: diabetes","(Intercept)",0.0301185229830191,0.0119512982603742,0.075901831492761,1.10774728742478e-13,"Sedentary time per 60 min/day","diabetes",3064
+"Model 5: diabetes","sitting_per_60min",1.08318142175934,1.0584659591587,1.1084739970071,1.1613199631711e-11,"Sedentary time per 60 min/day","diabetes",3064
+"Model 5: diabetes","age",1.04844181640254,1.04360259127227,1.05330348120482,2.39906614861425e-89,"Sedentary time per 60 min/day","diabetes",3064
+"Model 5: diabetes","sexMale",1.22980326455523,0.961121935850094,1.57359437246949,0.100029844243213,"Sedentary time per 60 min/day","diabetes",3064
+"Model 5: diabetes","race_ethnicityOther Hispanic",0.876638820915324,0.551959607644503,1.39230409561196,0.57697438688789,"Sedentary time per 60 min/day","diabetes",3064
+"Model 5: diabetes","race_ethnicityNon-Hispanic White",0.498462636834848,0.298754572306416,0.831669280915685,0.00768211694294889,"Sedentary time per 60 min/day","diabetes",3064
+"Model 5: diabetes","race_ethnicityNon-Hispanic Black",1.0821541632612,0.600172126821913,1.95120296449726,0.792926322153194,"Sedentary time per 60 min/day","diabetes",3064
+"Model 5: diabetes","race_ethnicityNon-Hispanic Asian",0.62334291899387,0.33232671417131,1.1692000013562,0.140782899573068,"Sedentary time per 60 min/day","diabetes",3064
+"Model 5: diabetes","race_ethnicityOther/Multi-racial",0.560300280058462,0.357613302252595,0.877865565559545,0.0114518436403857,"Sedentary time per 60 min/day","diabetes",3064
+"Model 5: diabetes","education9th-11th grade",1.42734129911792,0.703595878339749,2.89555872466873,0.324179647667938,"Sedentary time per 60 min/day","diabetes",3064
+"Model 5: diabetes","educationHigh school/GED",0.801673168226738,0.406614610111769,1.58056265729861,0.523311115819044,"Sedentary time per 60 min/day","diabetes",3064
+"Model 5: diabetes","educationSome college/AA",0.863483830800038,0.461335179968266,1.61618787906961,0.646274592590664,"Sedentary time per 60 min/day","diabetes",3064
+"Model 5: diabetes","educationCollege graduate or above",0.592396729605756,0.338270379358568,1.03743604720295,0.0670344716344936,"Sedentary time per 60 min/day","diabetes",3064
+"Model 5: diabetes","pir",0.863195356543686,0.792518660337478,0.940174990001237,0.000737071203155529,"Sedentary time per 60 min/day","diabetes",3064
+"Model 5: diabetes","meets_pa_guidelineMeets guideline",0.622530092303589,0.458511499180491,0.845221366347804,0.00238341002215196,"Sedentary time per 60 min/day","diabetes",3064
+"Model 5: diabetes","smoking_statusFormer",1.42376659044862,0.960403046094391,2.11068812445068,0.078600402888671,"Sedentary time per 60 min/day","diabetes",3064
+"Model 5: diabetes","smoking_statusNever",1.06889835635166,0.828777558263022,1.3785890855996,0.607763512273838,"Sedentary time per 60 min/day","diabetes",3064
+"Model 5: diabetes","alcohol_ever",0.835140695735416,0.547560338524879,1.27375913228555,0.402881341703575,"Sedentary time per 60 min/day","diabetes",3064
+"Model 5: diabetes","sleep_hours_weekday",1.03321930823474,0.956322148392451,1.11629971208299,0.407565725939509,"Sedentary time per 60 min/day","diabetes",3064
+"Model 5: ckd","(Intercept)",0.00651541660871516,0.00180896526817618,0.0234668151633008,1.36966150119045e-14,"Sedentary time per 60 min/day","ckd",3045
+"Model 5: ckd","sitting_per_60min",1.03864015855678,1.00708204610665,1.0711871819554,0.016027732639051,"Sedentary time per 60 min/day","ckd",3045
+"Model 5: ckd","age",1.04898935690412,1.03687214647947,1.06124817281887,7.13186790130754e-16,"Sedentary time per 60 min/day","ckd",3045
+"Model 5: ckd","sexMale",1.06508593471721,0.842899139912039,1.34584079472523,0.597333081307958,"Sedentary time per 60 min/day","ckd",3045
+"Model 5: ckd","race_ethnicityOther Hispanic",1.06249359289729,0.519083906269646,2.17477872327132,0.86826104053971,"Sedentary time per 60 min/day","ckd",3045
+"Model 5: ckd","race_ethnicityNon-Hispanic White",1.14560451176282,0.663322234605036,1.97854018590646,0.625846307395711,"Sedentary time per 60 min/day","ckd",3045
+"Model 5: ckd","race_ethnicityNon-Hispanic Black",1.68770739553822,0.92556942162038,3.07740963175709,0.0877036088785967,"Sedentary time per 60 min/day","ckd",3045
+"Model 5: ckd","race_ethnicityNon-Hispanic Asian",1.81469422860111,0.744019062263127,4.4261166283849,0.190198133543294,"Sedentary time per 60 min/day","ckd",3045
+"Model 5: ckd","race_ethnicityOther/Multi-racial",1.32301377938841,0.664569956034424,2.63383176527611,0.425559221099305,"Sedentary time per 60 min/day","ckd",3045
+"Model 5: ckd","education9th-11th grade",2.80521196204063,1.30288771516952,6.03982527454557,0.00838377691915262,"Sedentary time per 60 min/day","ckd",3045
+"Model 5: ckd","educationHigh school/GED",1.29566664114822,0.640629915586563,2.62047088988536,0.471024227044044,"Sedentary time per 60 min/day","ckd",3045
+"Model 5: ckd","educationSome college/AA",1.061635157816,0.521687115101243,2.16043136908274,0.868948271989143,"Sedentary time per 60 min/day","ckd",3045
+"Model 5: ckd","educationCollege graduate or above",0.773234240380032,0.354614371882304,1.68603203339577,0.517889345703332,"Sedentary time per 60 min/day","ckd",3045
+"Model 5: ckd","pir",0.914388126757618,0.823021254596017,1.01589799982227,0.0956466281698256,"Sedentary time per 60 min/day","ckd",3045
+"Model 5: ckd","meets_pa_guidelineMeets guideline",0.721370109820723,0.611133595757745,0.851491128871011,0.000113353661278886,"Sedentary time per 60 min/day","ckd",3045
+"Model 5: ckd","smoking_statusFormer",1.48367501458902,0.949173858911502,2.31916579691747,0.0834314411828336,"Sedentary time per 60 min/day","ckd",3045
+"Model 5: ckd","smoking_statusNever",1.12974280585018,0.813727719580458,1.56848387569774,0.466185664595365,"Sedentary time per 60 min/day","ckd",3045
+"Model 5: ckd","alcohol_ever",0.760959059175071,0.549848478659415,1.05312411003193,0.0993978020447768,"Sedentary time per 60 min/day","ckd",3045
+"Model 5: ckd","sleep_hours_weekday",1.06497781191896,1.00563038920204,1.12782763136232,0.0314036003308345,"Sedentary time per 60 min/day","ckd",3045
